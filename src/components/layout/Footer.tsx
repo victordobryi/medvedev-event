@@ -1,6 +1,15 @@
 import { ArrowUpRight, PhoneOutgoingIcon, Send, VideoIcon } from 'lucide-react';
 import { siteConfig } from '@/lib/site-config';
 
+async function Copyright() {
+  'use cache';
+  return (
+    <span>
+      © {new Date().getFullYear()} {siteConfig.name}
+    </span>
+  );
+}
+
 export default function Footer() {
   return (
     <footer className='site-footer'>
@@ -41,9 +50,7 @@ export default function Footer() {
       </div>
 
       <div className='section-inner footer-bottom'>
-        <span>
-          © {new Date().getFullYear()} {siteConfig.name}
-        </span>
+        <Copyright />
 
         <a href='/privacy'>Политика конфиденциальности</a>
 

@@ -5,7 +5,7 @@ import { ArrowLeft, ArrowRight, ArrowUpRight } from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { A11y, Autoplay, Navigation, Pagination } from 'swiper/modules';
 import type { Swiper as SwiperType } from 'swiper';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -76,42 +76,44 @@ export default function Gallery() {
           </motion.div>
 
           <div className='gallery-slider'>
-            <Swiper
-              modules={[A11y, Autoplay, Navigation, Pagination]}
-              slidesPerView={1.15}
-              spaceBetween={16}
-              centeredSlides
-              loop
-              autoplay={{ delay: 4500, disableOnInteraction: false }}
-              navigation={{
-                prevEl: '.gallery-prev',
-                nextEl: '.gallery-next',
-              }}
-              pagination={{
-                el: '.gallery-pagination',
-                clickable: true,
-              }}
-              onSwiper={setSwiper}
-              onSlideChange={(instance) => setActiveIndex(instance.realIndex)}
-              breakpoints={{
-                640: { slidesPerView: 1.4, spaceBetween: 20 },
-                900: { slidesPerView: 1.6, spaceBetween: 24 },
-              }}
-              aria-label='Фотогалерея свадеб'
-            >
-              {photos.map((photo) => (
-                <SwiperSlide key={photo.src}>
-                  <article className='gallery-slide'>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={photo.src} alt={photo.alt} loading='lazy' />
-                    <div className='gallery-slide-overlay'>
-                      <span>{photo.category}</span>
-                      <h3>{photo.title}</h3>
-                    </div>
-                  </article>
-                </SwiperSlide>
-              ))}
-            </Swiper>
+            <Suspense fallback={<div className='gallery-slider-skeleton' aria-hidden='true' />}>
+              <Swiper
+                modules={[A11y, Autoplay, Navigation, Pagination]}
+                slidesPerView={1.15}
+                spaceBetween={16}
+                centeredSlides
+                loop
+                autoplay={{ delay: 4500, disableOnInteraction: false }}
+                navigation={{
+                  prevEl: '.gallery-prev',
+                  nextEl: '.gallery-next',
+                }}
+                pagination={{
+                  el: '.gallery-pagination',
+                  clickable: true,
+                }}
+                onSwiper={setSwiper}
+                onSlideChange={(instance) => setActiveIndex(instance.realIndex)}
+                breakpoints={{
+                  640: { slidesPerView: 1.4, spaceBetween: 20 },
+                  900: { slidesPerView: 1.6, spaceBetween: 24 },
+                }}
+                aria-label='Фотогалерея свадеб'
+              >
+                {photos.map((photo) => (
+                  <SwiperSlide key={photo.src}>
+                    <article className='gallery-slide'>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={photo.src} alt={photo.alt} loading='lazy' />
+                      <div className='gallery-slide-overlay'>
+                        <span>{photo.category}</span>
+                        <h3>{photo.title}</h3>
+                      </div>
+                    </article>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </Suspense>
 
             <div className='gallery-controls'>
               <button
